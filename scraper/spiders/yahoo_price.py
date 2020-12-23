@@ -13,15 +13,16 @@ import yfinance as yf
 #import h5py
 #import pyodbc
 from scraper.items import YahooPriceItem
+from scrapy_redis.spiders import RedisSpider
 
-
-class YahooPriceSpider(scrapy.Spider):
+class YahooPriceSpider(RedisSpider):
+#class YahooPriceSpider(scrapy.Spider):
     name = 'yahoo_price'
-
+    redis_key = 'yahoopricespider:start_urls'
 
     def start_requests(self):
-#        if isinstance(self, RedisSpider):
-#            return
+        if isinstance(self, RedisSpider):
+            return
         url = 'https://quality.data.gov.tw/dq_download_json.php?nid=11549&md5_url=bb878d47ffbe7b83bfc1b41d0b24946e'
         yield scrapy.Request(url, callback = self.parse)
 
